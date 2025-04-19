@@ -3,7 +3,6 @@
 
 # Fine-Tuning ResNet50 on iNaturalist-12K
 
-![PyTorch](https://img.shields.io/badge/PyTorch-%3E%3D1.7-yellow.svg)
 
 ##  Project Overview
 This repository contains code and resources for fine-tuning a pre-trained ResNet50 model on the iNaturalist-12K dataset. We employ a feature-extraction strategy—freezing the backbone layers and training only the final classification layer—to achieve efficient convergence and strong performance on the species classification task.
