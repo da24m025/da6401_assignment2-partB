@@ -89,7 +89,6 @@ The iNaturalist-12K dataset should follow this structure:
 - **Test Accuracy**: 78.10%
 - **Convergence**: Feature extraction yields faster convergence than training from scratch
 
-![Training vs Validation Accuracy](finetune_resnet50_accuracy.png)
 
 ##  Logging & Visualization
 - **W&B Project**: `inaturalist_finetune`
