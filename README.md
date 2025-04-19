@@ -19,7 +19,6 @@ This project demonstrates a **feature-extraction** fine-tuning strategy on a pre
 ├── finetune_resnet50.py       # Fine-tuning script (training & validation)
 ├── log_test_metrics.py        # Test-set evaluation and W&B logging
 ├── DL-Project Part B.ipynb     # Reference notebook with end-to-end workflow
-├── finetune_resnet50_accuracy.png  # Generated accuracy plot artifact
 └── README.md                  # Project documentation (this file)
 ```
 
