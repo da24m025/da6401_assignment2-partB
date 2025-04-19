@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 import wandb
-os.environ["WANDB_API_KEY"] = "e095fbd374bc0fa234acb179a6ec7620b57abf28"
 # ===========================
 # Configuration and Settings
 # ===========================
