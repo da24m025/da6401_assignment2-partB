@@ -1,122 +1,114 @@
 # da6401_assignment2-partB
 ## DA24M025 -Teja Yelagandula
 
-Fine-Tuning Pre-Trained ResNet50 on iNaturalist 12K Dataset
-This project fine-tunes a pre-trained ResNet50 model on the iNaturalist 12K dataset for image classification. The model is fine-tuned using feature extraction, where only the final fully connected layer is trained, while the backbone layers are frozen. The project includes code for training, validation, and testing, with metrics logged to Weights & Biases (W&B) for tracking.
-Project Structure
+# Fine-Tuning ResNet50 on iNaturalist-12K
 
-finetune_resnet50.py: The main script for fine-tuning the ResNet50 model on the iNaturalist 12K dataset.
-log_test_metrics.py: A script to evaluate the model on the test set and log the test accuracy and loss to W&B.
-finetune_resnet50_accuracy.png: A plot of training and validation accuracy curves generated during training.
+![PyTorch](https://img.shields.io/badge/PyTorch-%3E%3D1.7-yellow.svg)
 
-Prerequisites
+##  Project Overview
+This repository contains code and resources for fine-tuning a pre-trained ResNet50 model on the iNaturalist-12K dataset. We employ a feature-extraction strategy—freezing the backbone layers and training only the final classification layer—to achieve efficient convergence and strong performance on the species classification task.
 
-Kaggle Account: You need a Kaggle account to run the notebook.
-Dataset: The iNaturalist 12K dataset must be uploaded as a zip folder to your Kaggle notebook.
-W&B Account: A Weights & Biases account is required for logging metrics. Ensure you have your API key ready.
+##  Key Features
+- **Feature Extraction**: Freeze all ResNet50 backbone parameters and fine-tune only the final fully connected layer.
+- **Modular Scripts**:
+  - `finetune_resnet50.py`: Training and validation loop with W&B logging.
+  - `log_test_metrics.py`: Evaluation on the held-out test set and W&B logging of final metrics.
+- **W&B Integration**: Track training/validation loss & accuracy, test metrics, and visualize performance curves.
+- **Results Visualization**: Automatically save training/validation accuracy plots (`finetune_resnet50_accuracy.png`).
 
-Instructions to Run
-Since this project is designed to run on Kaggle, there are no specific commands involved. Follow these steps to execute the code consecutively in a Kaggle notebook:
+## 📁 Project Structure
+```
+├── finetune_resnet50.py          # Main training & validation script
+├── log_test_metrics.py           # Script for test set evaluation and W&B logging
+├── finetune_resnet50_accuracy.png # Generated training vs validation accuracy plot
+├── README.md                     # This documentation file
+└── data/                         # (Optional) Local data folder for dataset archive
+```
 
-Upload the Dataset:
+##  Prerequisites
+- **Kaggle Account**: To run notebooks on Kaggle.
+- **W&B Account**: For experiment tracking. Retrieve your API key from https://wandb.ai/
+- **GPU Runtime**: Recommended for faster training.
 
-Go to your Kaggle notebook.
-Click on "+ Add Data" in the right sidebar.
-Upload the iNaturalist 12K dataset as a zip folder.
-Note the path where the dataset is mounted (typically /kaggle/input/inaturalist/inaturalist_12K).
+##  Getting Started
+1. **Clone the repository** (if running locally):
+   ```bash
+   git clone https://github.com/your-username/inaturalist_finetune.git
+   cd inaturalist_finetune
+   ```
+2. **Upload the Dataset on Kaggle**:
+   - In your Kaggle notebook, click **+ Add Data** → **Upload**, and select the iNaturalist-12K ZIP archive.
+   - Note the mount path (e.g., `/kaggle/input/inaturalist/inaturalist_12K`).
+3. **Install Dependencies**:
+   ```bash
+   pip install torch torchvision wandb
+   ```
+4. **Authenticate W&B**:
+   ```python
+   import wandb
+   wandb.login()
+   ```
+5. **Run Training**:
+   - Paste the contents of `finetune_resnet50.py` into a Kaggle notebook cell.
+   - Update `data_dir` to your dataset path.
+   - Execute to start training. Metrics and model checkpoints will be logged to W&B, and an accuracy plot will be saved.
 
+6. **Evaluate on Test Set**:
+   - Paste `log_test_metrics.py` into a new cell.
+   - Ensure the script loads the best model weights.
+   - Execute to compute and log test accuracy & loss to W&B.
 
-Set Up the Notebook:
-
-Create a new Kaggle notebook or upload an existing one.
-Ensure the notebook has access to a GPU for faster training (Settings > Accelerator > GPU).
-
-
-Install Required Libraries:
-
-Run the following code in a notebook cell to install necessary libraries:!pip install wandb
-
-
-
-
-Authenticate W&B:
-
-Run the following code in a notebook cell and enter your W&B API key when prompted:import wandb
-wandb.login()
-
-
-
-
-Run the Training Script:
-
-Copy and paste the code from finetune_resnet50.py into a notebook cell.
-Adjust the data_dir path if necessary to match the dataset's location.
-Execute the cell to start training. The script will:
-Load and preprocess the dataset.
-Fine-tune the ResNet50 model.
-Log training and validation metrics to W&B.
-Save the accuracy plot as finetune_resnet50_accuracy.png.
-
-
-
-
-Run the Test Metrics Script:
-
-After training, copy and paste the code from log_test_metrics.py into another notebook cell.
-Ensure the model is loaded with the best weights (if saved).
-Execute the cell to evaluate the model on the test set and log the test accuracy and loss to W&B.
-
-
-
-Dataset
-The iNaturalist 12K dataset should be organized as follows:
+##  Dataset Organization
+The iNaturalist-12K dataset should follow this structure:
+```
 /kaggle/input/inaturalist/inaturalist_12K/
-    train/
-        class1/
-            image1.jpg
-            image2.jpg
-        class2/
-            image1.jpg
-            image2.jpg
-    test/
-        class1/
-            image1.jpg
-        class2/
-            image1.jpg
+├── train/
+│   ├── class1/
+│   │   ├── img001.jpg
+│   │   └── img002.jpg
+│   ├── class2/
+│   │   └── img001.jpg
+│   └── ...
+└── test/
+    ├── class1/
+    │   └── img010.jpg
+    └── class2/
+        └── img005.jpg
+```
 
+##  Model Architecture & Hyperparameters
+- **Base Model**: `torchvision.models.resnet50(pretrained=True)`
+- **Frozen Layers**: All layers except the final `fc` layer
+- **Optimizer**: SGD (`lr=0.001`, `momentum=0.9`)
+- **Loss Function**: CrossEntropyLoss
+- **Batch Size**: 32
+- **Epochs**: 50
 
-Train Directory: Contains subdirectories for each class with training images.
-Test Directory: Contains subdirectories for each class with test images.
+##  Results
+- **Validation Accuracy**: ~77% after 50 epochs
+- **Test Accuracy**: 78.10%
+- **Convergence**: Feature extraction yields faster convergence than training from scratch
 
-Model
+![Training vs Validation Accuracy](finetune_resnet50_accuracy.png)
 
-Architecture: ResNet50 pre-trained on ImageNet.
-Fine-Tuning Strategy: Feature extraction (freeze all backbone layers, train only the final fully connected layer).
-Optimizer: SGD with a learning rate of 0.001 and momentum of 0.9.
-Loss Function: Cross-Entropy Loss.
+##  Logging & Visualization
+- **W&B Project**: `inaturalist_finetune`
+- **Tracked Metrics**:
+  - Training & validation loss
+  - Training & validation accuracy
+  - Test loss & accuracy
+- **Artifacts**: Accuracy plots and model checkpoints
 
-Results
+##  Future Improvements
+- **Early Stopping**: Automatically halt training when validation performance plateaus.
+- **Hyperparameter Search**: Integrate W&B Sweeps for tuning learning rate, batch size, and optimizer types.
+- **Data Augmentation**: Explore advanced transforms (CutMix, MixUp) to improve generalization.
 
-Validation Accuracy: Approximately 77% after 50 epochs.
-Test Accuracy: 78.10%.
-Insights: Fine-tuning converges faster and achieves higher accuracy compared to training from scratch, leveraging pre-trained features effectively.
+##  Contributing
+We welcome contributions! Feel free to:
+1. Fork this repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a Pull Request.
 
-Logging with W&B
-
-Project Name: inaturalist_finetune
-Logged Metrics:
-Training loss and accuracy.
-Validation loss and accuracy.
-Test loss and accuracy.
-Accuracy plot.
-
-
-
-Additional Notes
-
-Early Stopping: Not implemented in this version. Consider adding it for better efficiency.
-Hyperparameter Tuning: The current setup uses fixed hyperparameters. For further improvement, consider tuning learning rate, batch size, etc.
-Model Saving: The best model weights are loaded for testing. Ensure to save them if needed for future use.
-
-License
-This project is licensed under the MIT License.
