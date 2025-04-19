@@ -21,6 +21,7 @@ This repository contains code and resources for fine-tuning a pre-trained ResNet
 ├── log_test_metrics.py           # Script for test set evaluation and W&B logging
 ├── finetune_resnet50_accuracy.png # Generated training vs validation accuracy plot
 ├── README.md                     # This documentation file
+├── DL-Project Part B.ipynb       # Use this for reference
 ```
 
 ##  Prerequisites
